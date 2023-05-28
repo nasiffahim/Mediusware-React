@@ -9,19 +9,26 @@ const Problem1 = () => {
     }
     const [nameInput, setNameInput] = useState("")
     const [statusInput, setStatusInput] = useState("")
-    const [tableData, setTableData] = useState([])
+    const [activeData, setActiveData] = useState([])
+    const [completedData, setCompletedData] = useState([])
+    const [otherData, setOtherData] = useState([])
+
     const onSubmitHandler = (event) => {
         event.preventDefault()
-        console.log("i am here", tableData)
         const data = {
             name: nameInput,
             status: statusInput
         }
         setNameInput("")
         setStatusInput("")
-        setTableData(old => [...old, data])
-
-
+        if (statusInput === "active") {
+            setActiveData(old => [...old, data])
+        }
+        else if (statusInput === "completed") {
+            setCompletedData(old => [...old, data])
+        }
+        else
+            setOtherData(old => [...old, data])
     }
 
 
@@ -33,10 +40,6 @@ const Problem1 = () => {
         setStatusInput(event.target.value);
     }
 
-
-    const renderTableBody = () => {
-
-    }
 
     return (
 
@@ -77,21 +80,25 @@ const Problem1 = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {
-                                tableData.map(data => {
-                                    if (show == "all" || show == data.status) {
-                                        return (<tr>
-                                            <td scope='col'>
-                                                {data.name}
-                                            </td>
-                                            <td scope='col'>
-                                                {data.status}
-                                            </td>
-                                        </tr>)
-                                    }
+                            {(show === 'active' || show === "all") && activeData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.name}</td>
+                                    <td>{item.status}</td>
+                                </tr>
+                            ))}
+                            {(show === 'completed' || show === "all") && completedData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.name}</td>
+                                    <td>{item.status}</td>
+                                </tr>
+                            ))}
+                            {show === 'all' && otherData.map((item, index) => (
+                                <tr key={index}>
+                                    <td>{item.name}</td>
+                                    <td>{item.status}</td>
+                                </tr>
+                            ))}
 
-                                })
-                            }
                         </tbody>
                     </table>
                 </div>
